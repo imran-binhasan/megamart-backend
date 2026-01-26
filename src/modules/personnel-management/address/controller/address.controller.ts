@@ -33,17 +33,6 @@ export class AddressController {
   }
 
   @RequireResource('address', 'read')
-  @Get()
-  async findAll(@Query() query: AddressQueryDto) {
-    const result = await this.addressService.findAll(query);
-    return {
-      success: true,
-      message: 'Addresses retrieved successfully',
-      data: result,
-    };
-  }
-
-  @RequireResource('address', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const result = await this.addressService.findOne(id);
@@ -79,65 +68,14 @@ export class AddressController {
     };
   }
 
-  @RequireResource('address', 'manage')
-  @Patch(':id/restore')
-  @HttpCode(HttpStatus.OK)
-  async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.addressService.restore(id);
-    return {
-      success: true,
-      message: 'Address restored successfully',
-      data: result,
-    };
-  }
-
-  // Customer-specific endpoints
   @RequireResource('address', 'read')
-  @Get('customer/:customerId')
-  async findByCustomer(@Param('customerId', ParseIntPipe) customerId: number) {
-    const result = await this.addressService.findByCustomer(customerId);
+  @Get('user/:userId')
+  async findByUserId(@Param('userId', ParseIntPipe) userId: number) {
+    const result = await this.addressService.findByUserId(userId);
     return {
       success: true,
-      message: 'Customer addresses retrieved successfully',
+      message: 'User addresses retrieved successfully',
       data: result,
-    };
-  }
-
-  @RequireResource('address', 'read')
-  @Get('customer/:customerId/default')
-  async findDefaultAddress(
-    @Param('customerId', ParseIntPipe) customerId: number,
-  ) {
-    const result = await this.addressService.findDefaultAddress(customerId);
-    return {
-      success: true,
-      message: 'Default address retrieved successfully',
-      data: result,
-    };
-  }
-
-  @RequireResource('address', 'update')
-  @Patch(':id/set-default')
-  async setAsDefault(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.addressService.setAsDefault(id);
-    return {
-      success: true,
-      message: 'Address set as default successfully',
-      data: result,
-    };
-  }
-
-  // Utility endpoints
-  @RequireResource('address', 'read')
-  @Get('customer/:customerId/count')
-  async getAddressesCount(
-    @Param('customerId', ParseIntPipe) customerId: number,
-  ) {
-    const result = await this.addressService.getAddressesCount(customerId);
-    return {
-      success: true,
-      message: 'Address count retrieved successfully',
-      data: { count: result },
     };
   }
 }
