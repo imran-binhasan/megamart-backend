@@ -29,36 +29,21 @@ export class ProductReviewController {
   @RequireResource('product-review', 'create')
   @Post()
   async create(@Body() createProductReviewDto: CreateProductReviewDto) {
-    const result = await this.productReviewService.create(
+    return this.productReviewService.create(
       createProductReviewDto,
     );
-    return {
-      success: true,
-      message: 'Product review created successfully',
-      data: result,
-    };
   }
 
   @Public()
   @Get()
   async findAll(@Query() query: ProductReviewQueryDto) {
-    const result = await this.productReviewService.findAll(query);
-    return {
-      success: true,
-      message: 'Product reviews retrieved successfully',
-      data: result,
-    };
+    return this.productReviewService.findAll(query);
   }
 
   @Public()
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.productReviewService.findOne(id);
-    return {
-      success: true,
-      message: 'Product review retrieved successfully',
-      data: result,
-    };
+    return this.productReviewService.findOne(id);
   }
 
   @RequireResource('product-review', 'update')
@@ -67,15 +52,10 @@ export class ProductReviewController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductReviewDto: UpdateProductReviewDto,
   ) {
-    const result = await this.productReviewService.update(
+    return this.productReviewService.update(
       id,
       updateProductReviewDto,
     );
-    return {
-      success: true,
-      message: 'Product review updated successfully',
-      data: result,
-    };
   }
 
   @RequireResource('product-review', 'delete')
@@ -83,22 +63,13 @@ export class ProductReviewController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.productReviewService.remove(id);
-    return {
-      success: true,
-      message: 'Product review deleted successfully',
-    };
   }
 
   @RequireResource('product-review', 'manage')
   @Patch(':id/restore')
   @HttpCode(HttpStatus.OK)
   async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.productReviewService.restore(id);
-    return {
-      success: true,
-      message: 'Product review restored successfully',
-      data: result,
-    };
+    return this.productReviewService.restore(id);
   }
 
   // Utility endpoints
@@ -108,47 +79,27 @@ export class ProductReviewController {
     @Param('productId', ParseIntPipe) productId: number,
     @Query() query: ProductReviewQueryDto,
   ) {
-    const result = await this.productReviewService.findByProduct(
+    return this.productReviewService.findByProduct(
       productId,
       query,
     );
-    return {
-      success: true,
-      message: 'Product reviews by product retrieved successfully',
-      data: result,
-    };
   }
 
   @Public()
   @Get('product/:productId/average-rating')
   async getAverageRating(@Param('productId', ParseIntPipe) productId: number) {
-    const result = await this.productReviewService.getAverageRating(productId);
-    return {
-      success: true,
-      message: 'Average rating retrieved successfully',
-      data: { averageRating: result },
-    };
+    return this.productReviewService.getAverageRating(productId);
   }
 
   @RequirePermissions('read:product-review')
   @Get('stats/count')
   async getReviewsCount() {
-    const result = await this.productReviewService.getReviewsCount();
-    return {
-      success: true,
-      message: 'Product reviews count retrieved successfully',
-      data: { count: result },
-    };
+    return this.productReviewService.getReviewsCount();
   }
 
   @RequirePermissions('read:product-review')
   @Get('stats/by-rating')
   async getReviewsByRating() {
-    const result = await this.productReviewService.getReviewsByRating();
-    return {
-      success: true,
-      message: 'Reviews by rating retrieved successfully',
-      data: result,
-    };
+    return this.productReviewService.getReviewsByRating();
   }
 }

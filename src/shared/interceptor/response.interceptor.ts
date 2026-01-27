@@ -22,12 +22,29 @@ export class ResponseInterceptor<T>
 
     return next.handle().pipe(
       map((data) => {
+        // If controller wrapped response { success/message/data }, unwrap it
+        if (this.isControllerWrappedResponse(data)) {
+          data = data.data;
+        }
+
+        // Check if it's a paginated response with items and pagination
         if (this.isPaginatedResponse(data)) {
           return this.handlePaginatedResponse(data, requestId);
         }
 
         return this.handleRegularResponse(data, requestId);
       }),
+    );
+  }
+
+  private isControllerWrappedResponse(data: any): boolean {
+    // Detect if controller returned { success/message, data: {...} }
+    return (
+      data &&
+      typeof data === 'object' &&
+      'data' in data &&
+      ('success' in data || 'message' in data) &&
+      !('status' in data) // Not already formatted
     );
   }
 
@@ -42,7 +59,7 @@ export class ResponseInterceptor<T>
       typeof data.pagination.page === 'number' &&
       typeof data.pagination.limit === 'number' &&
       typeof data.pagination.total === 'number' &&
-      data.pagination.totalPages === 'number'
+      typeof data.pagination.totalPages === 'number'
     );
   }
 

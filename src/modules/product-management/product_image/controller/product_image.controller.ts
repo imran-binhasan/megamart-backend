@@ -31,15 +31,10 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Query() query?: ProductImageQueryDto,
   ) {
-    const result = await this.productImageService.findByProduct(
+    return this.productImageService.findByProduct(
       productId,
       query,
     );
-    return {
-      success: true,
-      message: 'Product images retrieved successfully',
-      data: result,
-    };
   }
 
   // POST /products/:productId/images - Create image for product
@@ -49,15 +44,10 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Body() createProductImageDto: CreateProductImageDto,
   ) {
-    const result = await this.productImageService.create({
+    return this.productImageService.create({
       ...createProductImageDto,
       productId,
     });
-    return {
-      success: true,
-      message: 'Product image created successfully',
-      data: result,
-    };
   }
 
   // GET /products/:productId/images/:imageId - Get single image
@@ -67,15 +57,10 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Param('imageId', ParseIntPipe) imageId: number,
   ) {
-    const result = await this.productImageService.findOneByProduct(
+    return this.productImageService.findOneByProduct(
       imageId,
       productId,
     );
-    return {
-      success: true,
-      message: 'Product image retrieved successfully',
-      data: result,
-    };
   }
 
   // PATCH /products/:productId/images/:imageId - Update image (including isPrimary)
@@ -86,16 +71,11 @@ export class ProductImageController {
     @Param('imageId', ParseIntPipe) imageId: number,
     @Body() updateProductImageDto: UpdateProductImageDto,
   ) {
-    const result = await this.productImageService.updateByProduct(
+    return this.productImageService.updateByProduct(
       imageId,
       productId,
       updateProductImageDto,
     );
-    return {
-      success: true,
-      message: 'Product image updated successfully',
-      data: result,
-    };
   }
 
   // DELETE /products/:productId/images/:imageId - Delete image
@@ -107,10 +87,6 @@ export class ProductImageController {
     @Param('imageId', ParseIntPipe) imageId: number,
   ) {
     await this.productImageService.removeByProduct(imageId, productId);
-    return {
-      success: true,
-      message: 'Product image deleted successfully',
-    };
   }
 
   // POST /products/:productId/images/reorder - Batch reorder images (optional bulk operation)
@@ -120,14 +96,9 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Body('imageIds') imageIds: number[],
   ) {
-    const result = await this.productImageService.reorderImages(
+    return this.productImageService.reorderImages(
       productId,
       imageIds,
     );
-    return {
-      success: true,
-      message: 'Images reordered successfully',
-      data: result,
-    };
   }
 }

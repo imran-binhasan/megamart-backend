@@ -29,47 +29,25 @@ export class AttributeValueController {
   @RequireResource('attribute_value', 'create')
   @Post()
   async create(@Body() createAttributeValueDto: CreateAttributeValueDto) {
-    const result = await this.attributeValueService.create(
-      createAttributeValueDto,
-    );
-    return {
-      success: true,
-      message: 'Attribute value created successfully',
-      data: result,
-    };
+    return this.attributeValueService.create(createAttributeValueDto);
   }
 
   @RequirePermissions('read:attribute_value', 'list:attribute_value')
   @Get()
   async findAll(@Query() query: AttributeValueQueryDto) {
-    const result = await this.attributeValueService.findAll(query);
-    return {
-      success: true,
-      message: 'Attribute values retrieved successfully',
-      data: result,
-    };
+    return this.attributeValueService.findAll(query);
   }
 
   @Public()
   @Get('all')
   async findAllWithoutPagination() {
-    const result = await this.attributeValueService.findAllWithoutPagination();
-    return {
-      success: true,
-      message: 'All attribute values retrieved successfully',
-      data: result,
-    };
+    return this.attributeValueService.findAllWithoutPagination();
   }
 
   @RequireResource('attribute_value', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.attributeValueService.findOne(id);
-    return {
-      success: true,
-      message: 'Attribute value retrieved successfully',
-      data: result,
-    };
+    return this.attributeValueService.findOne(id);
   }
 
   @RequireResource('attribute_value', 'update')
@@ -78,38 +56,21 @@ export class AttributeValueController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAttributeValueDto: UpdateAttributeValueDto,
   ) {
-    const result = await this.attributeValueService.update(
-      id,
-      updateAttributeValueDto,
-    );
-    return {
-      success: true,
-      message: 'Attribute value updated successfully',
-      data: result,
-    };
+    return this.attributeValueService.update(id, updateAttributeValueDto);
   }
 
   @RequireResource('attribute_value', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.attributeValueService.remove(id);
-    return {
-      success: true,
-      message: 'Attribute value deleted successfully',
-    };
+    return this.attributeValueService.remove(id);
   }
 
   @RequireResource('attribute_value', 'manage')
   @Patch(':id/restore')
   @HttpCode(HttpStatus.OK)
   async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.attributeValueService.restore(id);
-    return {
-      success: true,
-      message: 'Attribute value restored successfully',
-      data: result,
-    };
+    return this.attributeValueService.restore(id);
   }
 
   // Utility endpoints
@@ -118,13 +79,7 @@ export class AttributeValueController {
   async findByAttribute(
     @Param('attributeId', ParseIntPipe) attributeId: number,
   ) {
-    const result =
-      await this.attributeValueService.findByAttribute(attributeId);
-    return {
-      success: true,
-      message: 'Attribute values by attribute retrieved successfully',
-      data: result,
-    };
+    return this.attributeValueService.findByAttribute(attributeId);
   }
 
   @RequireResource('attribute_value', 'create')
@@ -133,25 +88,16 @@ export class AttributeValueController {
     @Param('attributeId', ParseIntPipe) attributeId: number,
     @Body('values') values: string[],
   ) {
-    const result = await this.attributeValueService.bulkCreateForAttribute(
+    return this.attributeValueService.bulkCreateForAttribute(
       attributeId,
       values,
     );
-    return {
-      success: true,
-      message: 'Attribute values created successfully',
-      data: result,
-    };
   }
 
   @RequirePermissions('read:attribute_value')
   @Get('stats/count')
   async getAttributeValuesCount() {
     const result = await this.attributeValueService.getAttributeValuesCount();
-    return {
-      success: true,
-      message: 'Attribute values count retrieved successfully',
-      data: { count: result },
-    };
+    return { count: result };
   }
 }

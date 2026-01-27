@@ -25,42 +25,22 @@ export class PayPalController {
 
   @Post('orders')
   async createOrder(@Body() orderData: PayPalOrderDto) {
-    const result = await this.paypalService.createOrder(orderData);
-    return {
-      success: true,
-      message: 'PayPal order created successfully',
-      data: result,
-    };
+    return this.paypalService.createOrder(orderData);
   }
 
   @Post('orders/:id/capture')
   async captureOrder(@Param('id') orderId: number) {
-    const result = await this.paypalService.captureOrder({ orderId });
-    return {
-      success: true,
-      message: 'PayPal order captured successfully',
-      data: result,
-    };
+    return this.paypalService.captureOrder({ orderId });
   }
 
   @Post('orders/:id/authorize')
   async authorizeOrder(@Param('id') orderId: string) {
-    const result = await this.paypalService.authorizeOrder(orderId);
-    return {
-      success: true,
-      message: 'PayPal order authorized successfully',
-      data: result,
-    };
+    return this.paypalService.authorizeOrder(orderId);
   }
 
   @Get('orders/:id')
   async getOrder(@Param('id') orderId: string) {
-    const result = await this.paypalService.getOrder(orderId);
-    return {
-      success: true,
-      message: 'PayPal order retrieved successfully',
-      data: result,
-    };
+    return this.paypalService.getOrder(orderId);
   }
 
   @Post('captures/:id/refund')
@@ -68,45 +48,25 @@ export class PayPalController {
     @Param('id') captureId: string,
     @Body() refundData: Omit<PayPalRefundDto, 'captureId'>,
   ) {
-    const result = await this.paypalService.refundCapture({
+    return this.paypalService.refundCapture({
       ...refundData,
       captureId,
     });
-    return {
-      success: true,
-      message: 'PayPal refund created successfully',
-      data: result,
-    };
   }
 
   @Get('captures/:id')
   async getCapture(@Param('id') captureId: string) {
-    const result = await this.paypalService.getCapture(captureId);
-    return {
-      success: true,
-      message: 'PayPal capture retrieved successfully',
-      data: result,
-    };
+    return this.paypalService.getCapture(captureId);
   }
 
   @Get('refunds/:id')
   async getRefund(@Param('id') refundId: string) {
-    const result = await this.paypalService.getRefund(refundId);
-    return {
-      success: true,
-      message: 'PayPal refund retrieved successfully',
-      data: result,
-    };
+    return this.paypalService.getRefund(refundId);
   }
 
   @Get('status')
   getPaymentStatus() {
-    const result = this.paypalService.getPaymentStatus();
-    return {
-      success: true,
-      message: 'PayPal status retrieved successfully',
-      data: result,
-    };
+    return this.paypalService.getPaymentStatus();
   }
 
   // Webhook endpoints

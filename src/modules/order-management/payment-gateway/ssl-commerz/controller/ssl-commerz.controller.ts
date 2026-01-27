@@ -23,22 +23,12 @@ export class SslCommerzController {
 
   @Post('initiate')
   async initiatePayment(@Body() paymentData: SSLCommerzPaymentDto) {
-    const result = await this.sslCommerzService.initiatePayment(paymentData);
-    return {
-      success: true,
-      message: 'Payment initiation successful',
-      data: result,
-    };
+    return this.sslCommerzService.initiatePayment(paymentData);
   }
 
   @Post('validate')
   async validatePayment(@Body() validationData: SSLCommerzValidationDto) {
-    const result = await this.sslCommerzService.validatePayment(validationData);
-    return {
-      success: true,
-      message: 'Payment validation successful',
-      data: result,
-    };
+    return this.sslCommerzService.validatePayment(validationData);
   }
 
   @Post('refund')
@@ -50,36 +40,21 @@ export class SslCommerzController {
       refundRemarks?: string;
     },
   ) {
-    const result = await this.sslCommerzService.initiateRefund(
+    return this.sslCommerzService.initiateRefund(
       refundData.bankTransId,
       refundData.refundAmount,
       refundData.refundRemarks,
     );
-    return {
-      success: true,
-      message: 'Refund initiation successful',
-      data: result,
-    };
   }
 
   @Get('transaction')
   async queryTransaction(@Query('transactionId') transactionId: string) {
-    const result = await this.sslCommerzService.queryTransaction(transactionId);
-    return {
-      success: true,
-      message: 'Transaction query successful',
-      data: result,
-    };
+    return this.sslCommerzService.queryTransaction(transactionId);
   }
 
   @Get('status')
   getPaymentStatus() {
-    const result = this.sslCommerzService.getPaymentStatus();
-    return {
-      success: true,
-      message: 'SSL Commerz status retrieved successfully',
-      data: result,
-    };
+    return this.sslCommerzService.getPaymentStatus();
   }
 
   // Webhook endpoints

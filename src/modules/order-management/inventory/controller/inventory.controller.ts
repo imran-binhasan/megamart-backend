@@ -31,34 +31,19 @@ export class InventoryController {
   @RequireResource('inventory', 'create')
   @Post()
   async create(@Body() createInventoryDto: CreateInventoryDto) {
-    const result = await this.inventoryService.create(createInventoryDto);
-    return {
-      success: true,
-      message: 'Inventory created successfully',
-      data: result,
-    };
+    return this.inventoryService.create(createInventoryDto);
   }
 
   @RequirePermissions('read:inventory')
   @Get()
   async findAll(@Query() query: InventoryQueryDto) {
-    const result = await this.inventoryService.findAll(query);
-    return {
-      success: true,
-      message: 'Inventory items retrieved successfully',
-      data: result,
-    };
+    return this.inventoryService.findAll(query);
   }
 
   @RequirePermissions('read:inventory')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.inventoryService.findOne(id);
-    return {
-      success: true,
-      message: 'Inventory item retrieved successfully',
-      data: result,
-    };
+    return this.inventoryService.findOne(id);
   }
 
   @RequireResource('inventory', 'update')
@@ -67,12 +52,7 @@ export class InventoryController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateInventoryDto: UpdateInventoryDto,
   ) {
-    const result = await this.inventoryService.update(id, updateInventoryDto);
-    return {
-      success: true,
-      message: 'Inventory updated successfully',
-      data: result,
-    };
+    return this.inventoryService.update(id, updateInventoryDto);
   }
 
   @RequireResource('inventory', 'update')
@@ -81,56 +61,32 @@ export class InventoryController {
     @Param('id', ParseIntPipe) id: number,
     @Body() adjustmentDto: StockAdjustmentDto,
   ) {
-    const result = await this.inventoryService.adjustStock(id, adjustmentDto);
-    return {
-      success: true,
-      message: 'Stock adjusted successfully',
-      data: result,
-    };
+    return this.inventoryService.adjustStock(id, adjustmentDto);
   }
 
   @RequireResource('inventory', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.inventoryService.remove(id);
-    return {
-      success: true,
-      message: 'Inventory deleted successfully',
-    };
+    return this.inventoryService.remove(id);
   }
 
   // Utility endpoints
   @RequirePermissions('read:inventory')
   @Get('product/:productId')
   async findByProduct(@Param('productId', ParseIntPipe) productId: number) {
-    const result = await this.inventoryService.findByProductId(productId);
-    return {
-      success: true,
-      message: 'Inventory for product retrieved successfully',
-      data: result,
-    };
+    return this.inventoryService.findByProductId(productId);
   }
 
   @RequirePermissions('read:inventory')
   @Get('reports/low-stock')
   async getLowStockItems(@Query('threshold') threshold?: number) {
-    const result = await this.inventoryService.getLowStockItems(threshold);
-    return {
-      success: true,
-      message: 'Low stock items retrieved successfully',
-      data: result,
-    };
+    return this.inventoryService.getLowStockItems(threshold);
   }
 
   @RequirePermissions('read:inventory')
   @Get('reports/stats')
   async getStats() {
-    const result = await this.inventoryService.getInventoryStats();
-    return {
-      success: true,
-      message: 'Inventory statistics retrieved successfully',
-      data: result,
-    };
+    return this.inventoryService.getInventoryStats();
   }
 }

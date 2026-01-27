@@ -72,12 +72,7 @@ export class ProductController {
   @RequireResource('product', 'create')
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
-    const result = await this.productService.create(createProductDto);
-    return {
-      success: true,
-      message: 'Product created successfully',
-      data: result,
-    };
+    return this.productService.create(createProductDto);
   }
 
   @ApiOperation({
@@ -185,12 +180,7 @@ export class ProductController {
   @Public()
   @Get()
   async findAll(@Query() query: ProductQueryDto) {
-    const result = await this.productService.findAll(query);
-    return {
-      success: true,
-      message: 'Products retrieved successfully',
-      data: result,
-    };
+    return this.productService.findAll(query);
   }
 
   @ApiOperation({
@@ -233,12 +223,7 @@ export class ProductController {
   @Public()
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.productService.findOne(id);
-    return {
-      success: true,
-      message: 'Product retrieved successfully',
-      data: result,
-    };
+    return this.productService.findOne(id);
   }
 
   @ApiOperation({
@@ -266,12 +251,7 @@ export class ProductController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    const result = await this.productService.update(id, updateProductDto);
-    return {
-      success: true,
-      message: 'Product updated successfully',
-      data: result,
-    };
+    return this.productService.update(id, updateProductDto);
   }
 
   @ApiOperation({
@@ -292,10 +272,6 @@ export class ProductController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.productService.remove(id);
-    return {
-      success: true,
-      message: 'Product deleted successfully',
-    };
+    return this.productService.remove(id);
   }
 }

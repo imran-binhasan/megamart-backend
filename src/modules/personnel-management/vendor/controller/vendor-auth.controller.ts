@@ -52,16 +52,10 @@ export class VendorAuthController {
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   refreshToken(@Body() dto: RefreshTokenDto) {
     const payload = this.tokenService.verifyRefreshToken(dto.refreshToken);
-    const tokens = this.tokenService.generateTokenPair({
+    return this.tokenService.generateTokenPair({
       sub: payload.sub,
       email: payload.email,
       type: payload.type,
     });
-    return {
-      accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token,
-      tokenType: 'Bearer',
-      expiresIn: tokens.expires_in,
-    };
   }
 }

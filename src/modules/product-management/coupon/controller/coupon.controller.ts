@@ -31,34 +31,19 @@ export class CouponController {
   @RequireResource('coupon', 'create')
   @Post()
   async create(@Body() createCouponDto: CreateCouponDto) {
-    const result = await this.couponService.create(createCouponDto);
-    return {
-      success: true,
-      message: 'Coupon created successfully',
-      data: result,
-    };
+    return this.couponService.create(createCouponDto);
   }
 
   @RequirePermissions('read:coupon')
   @Get()
   async findAll(@Query() query: CouponQueryDto) {
-    const result = await this.couponService.findAll(query);
-    return {
-      success: true,
-      message: 'Coupons retrieved successfully',
-      data: result,
-    };
+    return this.couponService.findAll(query);
   }
 
   @RequirePermissions('read:coupon')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.couponService.findOne(id);
-    return {
-      success: true,
-      message: 'Coupon retrieved successfully',
-      data: result,
-    };
+    return this.couponService.findOne(id);
   }
 
   @RequireResource('coupon', 'update')
@@ -67,75 +52,39 @@ export class CouponController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCouponDto: UpdateCouponDto,
   ) {
-    const result = await this.couponService.update(id, updateCouponDto);
-    return {
-      success: true,
-      message: 'Coupon updated successfully',
-      data: result,
-    };
+    return this.couponService.update(id, updateCouponDto);
   }
 
   @RequireResource('coupon', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.couponService.remove(id);
-    return {
-      success: true,
-      message: 'Coupon deleted successfully',
-    };
+    return this.couponService.remove(id);
   }
 
   // Public endpoints
   @Public()
   @Post('validate')
   async validateCoupon(@Body() validateDto: ValidateCouponDto) {
-    const result = await this.couponService.validateCoupon(validateDto);
-    return {
-      success: result.isValid,
-      message:
-        result.message ||
-        (result.isValid ? 'Coupon is valid' : 'Coupon is invalid'),
-      data: result.isValid
-        ? {
-            coupon: result.coupon,
-            discountAmount: result.discountAmount,
-          }
-        : null,
-    };
+    return this.couponService.validateCoupon(validateDto);
   }
 
   @Public()
   @Get('public/active')
   async getActiveCoupons() {
-    const result = await this.couponService.getActiveCoupons();
-    return {
-      success: true,
-      message: 'Active coupons retrieved successfully',
-      data: result,
-    };
+    return this.couponService.getActiveCoupons();
   }
 
   // Admin utility endpoints
   @RequirePermissions('read:coupon')
   @Get('reports/stats')
   async getStats() {
-    const result = await this.couponService.getCouponStats();
-    return {
-      success: true,
-      message: 'Coupon statistics retrieved successfully',
-      data: result,
-    };
+    return this.couponService.getCouponStats();
   }
 
   @RequirePermissions('read:coupon')
   @Get('reports/expired')
   async getExpiredCoupons() {
-    const result = await this.couponService.getExpiredCoupons();
-    return {
-      success: true,
-      message: 'Expired coupons retrieved successfully',
-      data: result,
-    };
+    return this.couponService.getExpiredCoupons();
   }
 }

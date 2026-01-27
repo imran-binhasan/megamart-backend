@@ -29,67 +29,37 @@ export class CategoryController {
   @RequireResource('category', 'create')
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
-    const result = await this.categoryService.create(createCategoryDto);
-    return {
-      success: true,
-      message: 'Category created successfully',
-      data: result,
-    };
+    return this.categoryService.create(createCategoryDto);
   }
 
   @RequirePermissions('read:category', 'list:category')
   @Get()
   async findAll(@Query() query: CategoryQueryDto) {
-    const result = await this.categoryService.findAll(query);
-    return {
-      success: true,
-      message: 'Categories retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.findAll(query);
   }
 
   @Public()
   @Get('all')
   async findAllWithoutPagination() {
-    const result = await this.categoryService.findAllWithoutPagination();
-    return {
-      success: true,
-      message: 'All categories retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.findAllWithoutPagination();
   }
 
   @Public()
   @Get('tree')
   async getCategoryTree() {
-    const result = await this.categoryService.getCategoryTree();
-    return {
-      success: true,
-      message: 'Category tree retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.getCategoryTree();
   }
 
   @Public()
   @Get('root')
   async getRootCategories() {
-    const result = await this.categoryService.getRootCategories();
-    return {
-      success: true,
-      message: 'Root categories retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.getRootCategories();
   }
 
   @RequireResource('category', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.categoryService.findOne(id);
-    return {
-      success: true,
-      message: 'Category retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.findOne(id);
   }
 
   @RequireResource('category', 'update')
@@ -98,68 +68,40 @@ export class CategoryController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    const result = await this.categoryService.update(id, updateCategoryDto);
-    return {
-      success: true,
-      message: 'Category updated successfully',
-      data: result,
-    };
+    return this.categoryService.update(id, updateCategoryDto);
   }
 
   @RequireResource('category', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.categoryService.remove(id);
-    return {
-      success: true,
-      message: 'Category deleted successfully',
-    };
+    return this.categoryService.remove(id);
   }
 
   @RequireResource('category', 'manage')
   @Patch(':id/restore')
   @HttpCode(HttpStatus.OK)
   async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.categoryService.restore(id);
-    return {
-      success: true,
-      message: 'Category restored successfully',
-      data: result,
-    };
+    return this.categoryService.restore(id);
   }
 
   // Utility endpoints
   @Public()
   @Get(':id/children')
   async getChildCategories(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.categoryService.getChildCategories(id);
-    return {
-      success: true,
-      message: 'Child categories retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.getChildCategories(id);
   }
 
   @RequireResource('category', 'read')
   @Get(':id/products')
   async findWithProducts(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.categoryService.findWithProducts(id);
-    return {
-      success: true,
-      message: 'Category with products retrieved successfully',
-      data: result,
-    };
+    return this.categoryService.findWithProducts(id);
   }
 
   @RequirePermissions('read:category')
   @Get('stats/count')
   async getCategoriesCount() {
     const result = await this.categoryService.getCategoriesCount();
-    return {
-      success: true,
-      message: 'Categories count retrieved successfully',
-      data: { count: result },
-    };
+    return { count: result };
   }
 }

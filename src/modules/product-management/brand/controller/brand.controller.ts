@@ -36,45 +36,25 @@ export class BrandController {
     @Body() createBrandDto: CreateBrandDto,
     @UploadedFile() logo?: Express.Multer.File,
   ) {
-    const result = await this.brandService.create(createBrandDto, logo);
-    return {
-      success: true,
-      message: 'Brand created successfully',
-      data: result,
-    };
+    return this.brandService.create(createBrandDto, logo);
   }
 
   @RequirePermissions('read:brand', 'list:brand')
   @Get()
   async findAll(@Query() query: PaginationQuery) {
-    const result = await this.brandService.findAll(query);
-    return {
-      success: true,
-      message: 'Brands retrieved successfully',
-      data: result,
-    };
+    return this.brandService.findAll(query);
   }
 
   @Public()
   @Get('all')
   async findAllWithoutPagination() {
-    const result = await this.brandService.findAllWithoutPagination();
-    return {
-      success: true,
-      message: 'All brands retrieved successfully',
-      data: result,
-    };
+    return this.brandService.findAllWithoutPagination();
   }
 
   @RequireResource('brand', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.brandService.findOne(id);
-    return {
-      success: true,
-      message: 'Brand retrieved successfully',
-      data: result,
-    };
+    return this.brandService.findOne(id);
   }
 
   @RequireResource('brand', 'update')
@@ -85,57 +65,34 @@ export class BrandController {
     @Body() updateBrandDto: UpdateBrandDto,
     @UploadedFile() logo?: Express.Multer.File,
   ) {
-    const result = await this.brandService.update(id, updateBrandDto, logo);
-    return {
-      success: true,
-      message: 'Brand updated successfully',
-      data: result,
-    };
+    return this.brandService.update(id, updateBrandDto, logo);
   }
 
   @RequireResource('brand', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.brandService.remove(id);
-    return {
-      success: true,
-      message: 'Brand deleted successfully',
-    };
+    return this.brandService.remove(id);
   }
 
   @RequireResource('brand', 'manage')
   @Patch(':id/restore')
   @HttpCode(HttpStatus.OK)
   async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.brandService.restore(id);
-    return {
-      success: true,
-      message: 'Brand restored successfully',
-      data: result,
-    };
+    return this.brandService.restore(id);
   }
 
   // Utility endpoints
   @RequireResource('brand', 'read')
   @Get(':id/products')
   async findWithProducts(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.brandService.findWithProducts(id);
-    return {
-      success: true,
-      message: 'Brand with products retrieved successfully',
-      data: result,
-    };
+    return this.brandService.findWithProducts(id);
   }
 
   @RequirePermissions('read:brand')
   @Get('stats/count')
   async getBrandsCount() {
     const result = await this.brandService.getBrandsCount();
-    return {
-      success: true,
-      message: 'Brands count retrieved successfully',
-      data: { count: result },
-    };
+    return { count: result };
   }
 }

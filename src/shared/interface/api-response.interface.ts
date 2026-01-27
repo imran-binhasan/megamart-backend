@@ -2,12 +2,12 @@ export interface ApiResponse<T = any> {
   data: T;
   status: 'success' | 'error' | 'warning';
   message?: string;
-  errors?: string[];
   meta: {
     timestamp: string;
     requestId?: string;
     pagination?: PaginationMeta;
   };
+  errors?: string[];
 }
 
 export interface PaginationMeta {

@@ -29,15 +29,10 @@ export class AddressController {
     @Body() createAddressDto: CreateAddressDto,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    const result = await this.addressService.create(
+    return this.addressService.create(
       createAddressDto,
       user.id,
     );
-    return {
-      success: true,
-      message: 'Address created successfully',
-      data: result,
-    };
   }
 
   @RequireResource('address', 'read')
@@ -46,12 +41,7 @@ export class AddressController {
     @Param('id', ParseIntPipe) id: number,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    const result = await this.addressService.findOne(id, user.id);
-    return {
-      success: true,
-      message: 'Address retrieved successfully',
-      data: result,
-    };
+    return this.addressService.findOne(id, user.id);
   }
 
   @RequireResource('address', 'update')
@@ -61,17 +51,12 @@ export class AddressController {
     @Body() updateAddressDto: UpdateAddressDto,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    const result = await this.addressService.update(
+    return this.addressService.update(
       id,
       updateAddressDto,
       user.id,
       user,
     );
-    return {
-      success: true,
-      message: 'Address updated successfully',
-      data: result,
-    };
   }
 
   @RequireResource('address', 'delete')
@@ -81,21 +66,12 @@ export class AddressController {
     @Param('id', ParseIntPipe) id: number,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    await this.addressService.remove(id, user.id, user);
-    return {
-      success: true,
-      message: 'Address deleted successfully',
-    };
+    return this.addressService.remove(id, user.id, user);
   }
 
   @RequireResource('address', 'read')
   @Get()
   async findByUserId(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.addressService.findByUserId(user.id);
-    return {
-      success: true,
-      message: 'User addresses retrieved successfully',
-      data: result,
-    };
+    return this.addressService.findByUserId(user.id);
   }
 }

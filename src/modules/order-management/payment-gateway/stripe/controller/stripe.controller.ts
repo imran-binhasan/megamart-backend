@@ -29,13 +29,9 @@ export class StripeController {
   async createPaymentIntent(@Body() paymentData: StripePaymentIntentDto) {
     const result = await this.stripeService.createPaymentIntent(paymentData);
     return {
-      success: true,
-      message: 'Payment intent created successfully',
-      data: {
-        clientSecret: result.client_secret,
-        paymentIntentId: result.id,
-        status: result.status,
-      },
+      clientSecret: result.client_secret,
+      paymentIntentId: result.id,
+      status: result.status,
     };
   }
 
@@ -43,45 +39,25 @@ export class StripeController {
   async createCheckoutSession(@Body() sessionData: StripeCheckoutSessionDto) {
     const result = await this.stripeService.createCheckoutSession(sessionData);
     return {
-      success: true,
-      message: 'Checkout session created successfully',
-      data: {
-        sessionId: result.id,
-        url: result.url,
-        paymentStatus: result.payment_status,
-      },
+      sessionId: result.id,
+      url: result.url,
+      paymentStatus: result.payment_status,
     };
   }
 
   @Get('payment-intent/:id')
   async getPaymentIntent(@Param('id') paymentIntentId: string) {
-    const result =
-      await this.stripeService.retrievePaymentIntent(paymentIntentId);
-    return {
-      success: true,
-      message: 'Payment intent retrieved successfully',
-      data: result,
-    };
+    return await this.stripeService.retrievePaymentIntent(paymentIntentId);
   }
 
   @Get('checkout-session/:id')
   async getCheckoutSession(@Param('id') sessionId: string) {
-    const result = await this.stripeService.retrieveCheckoutSession(sessionId);
-    return {
-      success: true,
-      message: 'Checkout session retrieved successfully',
-      data: result,
-    };
+    return await this.stripeService.retrieveCheckoutSession(sessionId);
   }
 
   @Post('refund')
   async createRefund(@Body() refundData: StripeRefundDto) {
-    const result = await this.stripeService.createRefund(refundData);
-    return {
-      success: true,
-      message: 'Refund created successfully',
-      data: result,
-    };
+    return this.stripeService.createRefund(refundData);
   }
 
   @Post('payment-intent/:id/confirm')
@@ -89,46 +65,25 @@ export class StripeController {
     @Param('id') paymentIntentId: string,
     @Body() confirmData: { paymentMethodId?: string },
   ) {
-    const result = await this.stripeService.confirmPaymentIntent(
+    return this.stripeService.confirmPaymentIntent(
       paymentIntentId,
       confirmData.paymentMethodId,
     );
-    return {
-      success: true,
-      message: 'Payment intent confirmed successfully',
-      data: result,
-    };
   }
 
   @Post('payment-intent/:id/cancel')
   async cancelPaymentIntent(@Param('id') paymentIntentId: string) {
-    const result =
-      await this.stripeService.cancelPaymentIntent(paymentIntentId);
-    return {
-      success: true,
-      message: 'Payment intent cancelled successfully',
-      data: result,
-    };
+    return await this.stripeService.cancelPaymentIntent(paymentIntentId);
   }
 
   @Get('customer/:id/payment-methods')
   async getCustomerPaymentMethods(@Param('id') customerId: number) {
-    const result = await this.stripeService.listPaymentMethods(customerId);
-    return {
-      success: true,
-      message: 'Payment methods retrieved successfully',
-      data: result,
-    };
+    return this.stripeService.listPaymentMethods(customerId);
   }
 
   @Get('status')
   getPaymentStatus() {
-    const result = this.stripeService.getPaymentStatus();
-    return {
-      success: true,
-      message: 'Stripe status retrieved successfully',
-      data: result,
-    };
+    return this.stripeService.getPaymentStatus();
   }
 
   // Webhook endpoint

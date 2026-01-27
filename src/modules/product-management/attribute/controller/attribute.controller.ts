@@ -29,45 +29,25 @@ export class AttributeController {
   @RequireResource('attribute', 'create')
   @Post()
   async create(@Body() createAttributeDto: CreateAttributeDto) {
-    const result = await this.attributeService.create(createAttributeDto);
-    return {
-      success: true,
-      message: 'Attribute created successfully',
-      data: result,
-    };
+    return this.attributeService.create(createAttributeDto);
   }
 
   @RequirePermissions('read:attribute', 'list:attribute')
   @Get()
   async findAll(@Query() query: PaginationQuery) {
-    const result = await this.attributeService.findAll(query);
-    return {
-      success: true,
-      message: 'Attributes retrieved successfully',
-      data: result,
-    };
+    return this.attributeService.findAll(query);
   }
 
   @Public()
   @Get('all')
   async findAllWithoutPagination() {
-    const result = await this.attributeService.findAllWithoutPagination();
-    return {
-      success: true,
-      message: 'All attributes retrieved successfully',
-      data: result,
-    };
+    return this.attributeService.findAllWithoutPagination();
   }
 
   @RequireResource('attribute', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.attributeService.findOne(id);
-    return {
-      success: true,
-      message: 'Attribute retrieved successfully',
-      data: result,
-    };
+    return this.attributeService.findOne(id);
   }
 
   @RequireResource('attribute', 'update')
@@ -76,57 +56,34 @@ export class AttributeController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAttributeDto: UpdateAttributeDto,
   ) {
-    const result = await this.attributeService.update(id, updateAttributeDto);
-    return {
-      success: true,
-      message: 'Attribute updated successfully',
-      data: result,
-    };
+    return this.attributeService.update(id, updateAttributeDto);
   }
 
   @RequireResource('attribute', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.attributeService.remove(id);
-    return {
-      success: true,
-      message: 'Attribute deleted successfully',
-    };
+    return this.attributeService.remove(id);
   }
 
   @RequireResource('attribute', 'manage')
   @Patch(':id/restore')
   @HttpCode(HttpStatus.OK)
   async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.attributeService.restore(id);
-    return {
-      success: true,
-      message: 'Attribute restored successfully',
-      data: result,
-    };
+    return this.attributeService.restore(id);
   }
 
   // Utility endpoints
   @Public()
   @Get('type/:type')
   async findByType(@Param('type') type: string) {
-    const result = await this.attributeService.findByType(type);
-    return {
-      success: true,
-      message: 'Attributes by type retrieved successfully',
-      data: result,
-    };
+    return this.attributeService.findByType(type);
   }
 
   @RequirePermissions('read:attribute')
   @Get('stats/count')
   async getAttributesCount() {
     const result = await this.attributeService.getAttributesCount();
-    return {
-      success: true,
-      message: 'Attributes count retrieved successfully',
-      data: { count: result },
-    };
+    return { count: result };
   }
 }

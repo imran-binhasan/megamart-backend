@@ -27,12 +27,7 @@ export class WishlistController {
   @RequireResource('wishlist', 'create')
   @Post()
   async create(@Body() createWishlistDto: CreateWishlistDto) {
-    const result = await this.wishlistService.create(createWishlistDto);
-    return {
-      success: true,
-      message: 'Item added to wishlist successfully',
-      data: result,
-    };
+    return this.wishlistService.create(createWishlistDto);
   }
 
   @RequireResource('wishlist', 'update')
@@ -41,69 +36,40 @@ export class WishlistController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateWishlistDto: UpdateWishlistDto,
   ) {
-    const result = await this.wishlistService.update(id, updateWishlistDto);
-    return {
-      success: true,
-      message: 'Wishlist item updated successfully',
-      data: result,
-    };
+    return this.wishlistService.update(id, updateWishlistDto);
   }
 
   @RequireResource('wishlist', 'read')
   @Get()
   async findAll(@Query() query: WishlistQueryDto) {
-    const result = await this.wishlistService.findAll(query);
-    return {
-      success: true,
-      message: 'Wishlist items retrieved successfully',
-      data: result,
-    };
+    return this.wishlistService.findAll(query);
   }
 
   @RequireResource('wishlist', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.wishlistService.findOne(id);
-    return {
-      success: true,
-      message: 'Wishlist item retrieved successfully',
-      data: result,
-    };
+    return this.wishlistService.findOne(id);
   }
 
   @RequireResource('wishlist', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.wishlistService.remove(id);
-    return {
-      success: true,
-      message: 'Item removed from wishlist successfully',
-    };
+    return this.wishlistService.remove(id);
   }
 
   @RequireResource('wishlist', 'manage')
   @Patch(':id/restore')
   @HttpCode(HttpStatus.OK)
   async restore(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.wishlistService.restore(id);
-    return {
-      success: true,
-      message: 'Wishlist item restored successfully',
-      data: result,
-    };
+    return this.wishlistService.restore(id);
   }
 
   // Customer-specific endpoints
   @RequireResource('wishlist', 'read')
   @Get('customer/:customerId')
   async findByCustomer(@Param('customerId', ParseIntPipe) customerId: number) {
-    const result = await this.wishlistService.findByCustomerId(customerId);
-    return {
-      success: true,
-      message: 'Customer wishlist retrieved successfully',
-      data: result,
-    };
+    return this.wishlistService.findByCustomerId(customerId);
   }
 
   @RequireResource('wishlist', 'delete')
@@ -113,14 +79,10 @@ export class WishlistController {
     @Param('customerId', ParseIntPipe) customerId: number,
     @Param('productId', ParseIntPipe) productId: number,
   ) {
-    await this.wishlistService.removeByCustomerAndProduct(
+    return this.wishlistService.removeByCustomerAndProduct(
       customerId,
       productId,
     );
-    return {
-      success: true,
-      message: 'Item removed from wishlist successfully',
-    };
   }
 
   @RequireResource('wishlist', 'delete')
@@ -129,11 +91,7 @@ export class WishlistController {
   async clearCustomerWishlist(
     @Param('customerId', ParseIntPipe) customerId: number,
   ) {
-    await this.wishlistService.clearCustomerWishlist(customerId);
-    return {
-      success: true,
-      message: 'Wishlist cleared successfully',
-    };
+    return this.wishlistService.clearCustomerWishlist(customerId);
   }
 
   // Utility endpoints
@@ -143,11 +101,7 @@ export class WishlistController {
     @Param('customerId', ParseIntPipe) customerId: number,
   ) {
     const result = await this.wishlistService.getWishlistCount(customerId);
-    return {
-      success: true,
-      message: 'Wishlist count retrieved successfully',
-      data: { count: result },
-    };
+    return { count: result };
   }
 
   @RequireResource('wishlist', 'read')
@@ -160,10 +114,6 @@ export class WishlistController {
       customerId,
       productId,
     );
-    return {
-      success: true,
-      message: 'Product wishlist status retrieved successfully',
-      data: { inWishlist: result },
-    };
+    return { inWishlist: result };
   }
 }

@@ -63,12 +63,7 @@ export class CartController {
     @CurrentUser() user: AuthenticatedUser,
     @Body() createCartDto: CreateCartDto,
   ) {
-    const result = await this.cartService.addToCart(user.id, createCartDto);
-    return {
-      success: true,
-      message: 'Item added to cart successfully',
-      data: result,
-    };
+    return this.cartService.addToCart(user.id, createCartDto);
   }
 
   @CustomerOnly()
@@ -85,12 +80,7 @@ export class CartController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getMyCart(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.cartService.findByCustomer(user.id);
-    return {
-      success: true,
-      message: 'Cart items retrieved successfully',
-      data: result,
-    };
+    return this.cartService.findByCustomer(user.id);
   }
 
   @CustomerOnly()
@@ -122,12 +112,7 @@ export class CartController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getMyCartTotal(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.cartService.getCartTotal(user.id);
-    return {
-      success: true,
-      message: 'Cart total retrieved successfully',
-      data: result,
-    };
+    return this.cartService.getCartTotal(user.id);
   }
 
   @CustomerOnly()
@@ -158,12 +143,7 @@ export class CartController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getMyCartItemsCount(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.cartService.getCartItemsCount(user.id);
-    return {
-      success: true,
-      message: 'Cart items count retrieved successfully',
-      data: { count: result },
-    };
+    return this.cartService.getCartItemsCount(user.id);
   }
 
   @CustomerOnly()
@@ -202,12 +182,7 @@ export class CartController {
       throw new BadRequestException('You can only update your own cart items');
     }
 
-    const result = await this.cartService.updateQuantity(id, updateCartDto);
-    return {
-      success: true,
-      message: 'Cart item quantity updated successfully',
-      data: result,
-    };
+    return this.cartService.updateQuantity(id, updateCartDto);
   }
 
   @CustomerOnly()
@@ -242,10 +217,6 @@ export class CartController {
     }
 
     await this.cartService.remove(id);
-    return {
-      success: true,
-      message: 'Item removed from cart successfully',
-    };
   }
 
   @CustomerOnly()
@@ -260,10 +231,6 @@ export class CartController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async clearMyCart(@CurrentUser() user: AuthenticatedUser) {
     await this.cartService.clearCart(user.id);
-    return {
-      success: true,
-      message: 'Cart cleared successfully',
-    };
   }
 
   @CustomerOnly()
@@ -282,12 +249,7 @@ export class CartController {
       }
     }
 
-    const result = await this.cartService.bulkUpdateQuantities(updates);
-    return {
-      success: true,
-      message: 'Cart items updated successfully',
-      data: result,
-    };
+    return this.cartService.bulkUpdateQuantities(updates);
   }
 
   // Admin endpoints for cart management
@@ -314,45 +276,25 @@ export class CartController {
     description: 'Forbidden - Requires admin permissions',
   })
   async findAll(@Query() query: CartQueryDto) {
-    const result = await this.cartService.findAll(query);
-    return {
-      success: true,
-      message: 'Cart items retrieved successfully',
-      data: result,
-    };
+    return this.cartService.findAll(query);
   }
 
   @RequireResource('cart', 'read')
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    const result = await this.cartService.findOne(id);
-    return {
-      success: true,
-      message: 'Cart item retrieved successfully',
-      data: result,
-    };
+    return this.cartService.findOne(id);
   }
 
   @RequireResource('cart', 'read')
   @Get('customer/:customerId')
   async findByCustomer(@Param('customerId') customerId: number) {
-    const result = await this.cartService.findByCustomer(customerId);
-    return {
-      success: true,
-      message: 'Customer cart items retrieved successfully',
-      data: result,
-    };
+    return this.cartService.findByCustomer(customerId);
   }
 
   @RequireResource('cart', 'update')
   @Patch(':id')
   async update(@Param('id') id: number, @Body() updateCartDto: UpdateCartDto) {
-    const result = await this.cartService.updateQuantity(id, updateCartDto);
-    return {
-      success: true,
-      message: 'Cart item updated successfully',
-      data: result,
-    };
+    return this.cartService.updateQuantity(id, updateCartDto);
   }
 
   @RequireResource('cart', 'delete')
@@ -360,10 +302,6 @@ export class CartController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: number) {
     await this.cartService.remove(id);
-    return {
-      success: true,
-      message: 'Cart item deleted successfully',
-    };
   }
 
   @RequireResource('cart', 'manage')
@@ -371,22 +309,13 @@ export class CartController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async clearCustomerCart(@Param('customerId') customerId: number) {
     await this.cartService.clearCart(customerId);
-    return {
-      success: true,
-      message: 'Customer cart cleared successfully',
-    };
   }
 
   // Utility endpoints
   @RequireResource('cart', 'read')
   @Get('customer/:customerId/total')
   async getCustomerCartTotal(@Param('customerId') customerId: number) {
-    const result = await this.cartService.getCartTotal(customerId);
-    return {
-      success: true,
-      message: 'Customer cart total retrieved successfully',
-      data: result,
-    };
+    return this.cartService.getCartTotal(customerId);
   }
 
   @RequireResource('cart', 'manage')
@@ -395,14 +324,9 @@ export class CartController {
     @Param('fromCustomerId') fromCustomerId: number,
     @Param('toCustomerId') toCustomerId: number,
   ) {
-    const result = await this.cartService.moveToCart(
+    return this.cartService.moveToCart(
       toCustomerId,
       fromCustomerId,
     );
-    return {
-      success: true,
-      message: 'Cart items moved successfully',
-      data: result,
-    };
   }
 }
