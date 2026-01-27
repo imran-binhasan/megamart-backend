@@ -69,7 +69,6 @@ export class CouponService {
       couponType,
       isActive,
       isExpired,
-      code,
     } = query;
 
     if (page < 1 || limit < 1 || limit > 100) {
@@ -83,12 +82,6 @@ export class CouponService {
         '(coupon.name ILIKE :search OR coupon.code ILIKE :search)',
         { search: `%${search.trim()}%` },
       );
-    }
-
-    if (code?.trim()) {
-      queryBuilder.andWhere('coupon.code ILIKE :code', {
-        code: `%${code.trim().toUpperCase()}%`,
-      });
     }
 
     if (couponType) {

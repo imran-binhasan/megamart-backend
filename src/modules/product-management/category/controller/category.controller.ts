@@ -214,6 +214,44 @@ export class CategoryController {
    * Get single category by ID
    * @param id Category ID
    */
+  @ApiOperation({
+    summary: 'Get a single category',
+    description: 'Retrieve a specific category with all its details including parent and children.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Category ID',
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Category found',
+    schema: {
+      example: {
+        id: 1,
+        name: 'Electronics',
+        parentId: null,
+        parent: null,
+        children: [
+          {
+            id: 2,
+            name: 'Phones',
+          },
+          {
+            id: 3,
+            name: 'Laptops',
+          },
+        ],
+        createdAt: '2026-01-27T10:00:00Z',
+        updatedAt: '2026-01-27T10:00:00Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Category not found',
+  })
   @RequireResource('category', 'read')
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
@@ -225,6 +263,46 @@ export class CategoryController {
    * @param id Category ID
    * @param updateCategoryDto Updated category data
    */
+  @ApiOperation({
+    summary: 'Update a category',
+    description: 'Update category name and/or parent. Prevents circular dependencies.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Category ID',
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Category updated successfully',
+    schema: {
+      example: {
+        id: 1,
+        name: 'Electronics & Gadgets',
+        parentId: 3,
+        parent: {
+          id: 3,
+          name: 'Products',
+        },
+        children: [],
+        updatedAt: '2026-01-27T11:00:00Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or circular dependency detected',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Category or parent category not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Category with this name already exists',
+  })
+  @ApiBearerAuth()
   @RequireResource('category', 'update')
   @Patch(':id')
   async update(
@@ -238,6 +316,30 @@ export class CategoryController {
    * Delete category (soft delete)
    * @param id Category ID
    */
+  @ApiOperation({
+    summary: 'Delete a category',
+    description:
+      'Soft delete a category. Prevents deletion if category has children or associated products.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Category ID',
+    example: 1,
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'Category deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete category with children or products',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Category not found',
+  })
+  @ApiBearerAuth()
   @RequireResource('category', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
