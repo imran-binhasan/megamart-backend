@@ -14,6 +14,8 @@ import {
 import { AddressService } from '../service/address.service';
 import { UpdateAddressDto } from '../dto/update-address.dto';
 import { RequireResource } from 'src/core/auth/decorator/auth.decorator';
+import { CurrentUser } from 'src/core/auth/decorator/current-user.decorator';
+import type { AuthenticatedUser } from 'src/core/auth/interface/auth-user.interface';
 import { AddressQueryDto } from '../dto/query-address.dto';
 import { CreateAddressDto } from '../dto/create-address.dto';
 
@@ -23,8 +25,14 @@ export class AddressController {
 
   @RequireResource('address', 'create')
   @Post()
-  async create(@Body() createAddressDto: CreateAddressDto) {
-    const result = await this.addressService.create(createAddressDto);
+  async create(
+    @Body() createAddressDto: CreateAddressDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    const result = await this.addressService.create(
+      createAddressDto,
+      user.id,
+    );
     return {
       success: true,
       message: 'Address created successfully',
@@ -34,8 +42,11 @@ export class AddressController {
 
   @RequireResource('address', 'read')
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.addressService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    const result = await this.addressService.findOne(id, user.id);
     return {
       success: true,
       message: 'Address retrieved successfully',
@@ -48,8 +59,14 @@ export class AddressController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAddressDto: UpdateAddressDto,
+    @CurrentUser() user: AuthenticatedUser,
   ) {
-    const result = await this.addressService.update(id, updateAddressDto);
+    const result = await this.addressService.update(
+      id,
+      updateAddressDto,
+      user.id,
+      user,
+    );
     return {
       success: true,
       message: 'Address updated successfully',
@@ -60,8 +77,11 @@ export class AddressController {
   @RequireResource('address', 'delete')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    await this.addressService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    await this.addressService.remove(id, user.id, user);
     return {
       success: true,
       message: 'Address deleted successfully',
@@ -69,9 +89,9 @@ export class AddressController {
   }
 
   @RequireResource('address', 'read')
-  @Get('user/:userId')
-  async findByUserId(@Param('userId', ParseIntPipe) userId: number) {
-    const result = await this.addressService.findByUserId(userId);
+  @Get()
+  async findByUserId(@CurrentUser() user: AuthenticatedUser) {
+    const result = await this.addressService.findByUserId(user.id);
     return {
       success: true,
       message: 'User addresses retrieved successfully',

@@ -134,13 +134,77 @@ export class ProductImageService {
     return productImage;
   }
 
-  async findByProduct(productId: number): Promise<ProductImage[]> {
+  async findByProduct(
+    productId: number,
+    query?: ProductImageQueryDto,
+  ): Promise<ProductImage[] | PaginatedServiceResponse<ProductImage>> {
+    // Check if product exists
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${productId} not found`);
+    }
+
+    // If pagination query is provided, use paginated response
+    if (query && (query.page || query.limit)) {
+      return this.findAll({
+        ...query,
+        productId: productId.toString(),
+      });
+    }
+
+    // Otherwise return simple list ordered by primary and sortOrder
     return this.productImageRepository.find({
       where: { product: { id: productId } },
       relations: ['product'],
       order: { isPrimary: 'DESC', sortOrder: 'ASC', createdAt: 'DESC' },
     });
   }
+
+  async findOneByProduct(
+    imageId: number,
+    productId: number,
+  ): Promise<ProductImage> {
+    const image = await this.productImageRepository.findOne({
+      where: {
+        id: imageId,
+        product: { id: productId },
+      },
+      relations: ['product'],
+    });
+
+    if (!image) {
+      throw new NotFoundException(
+        `Product image with ID ${imageId} not found for product ${productId}`,
+      );
+    }
+
+    return image;
+  }
+
+  async updateByProduct(
+    imageId: number,
+    productId: number,
+    updateProductImageDto: UpdateProductImageDto,
+  ): Promise<ProductImage> {
+    const image = await this.findOneByProduct(imageId, productId);
+
+    // If setting as primary, unset other primary images
+    if (updateProductImageDto.isPrimary) {
+      await this.unsetPrimaryImages(productId);
+    }
+
+    await this.productImageRepository.update(imageId, updateProductImageDto);
+    return this.findOne(imageId);
+  }
+
+  async removeByProduct(imageId: number, productId: number): Promise<void> {
+    const image = await this.findOneByProduct(imageId, productId);
+    await this.productImageRepository.remove(image);
+  }
+
 
   async findPrimaryImage(productId: number): Promise<ProductImage | null> {
     return this.productImageRepository.findOne({
@@ -225,7 +289,7 @@ export class ProductImageService {
   async reorderImages(
     productId: number,
     imageIds: number[],
-  ): Promise<ProductImage[]> {
+  ): Promise<ProductImage[] | PaginatedServiceResponse<ProductImage>> {
     // Validate that all image IDs belong to the product
     const images = await this.productImageRepository.find({
       where: { product: { id: productId } },

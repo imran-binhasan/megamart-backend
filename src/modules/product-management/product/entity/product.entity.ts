@@ -33,16 +33,16 @@ import {
 @Index(['avgRating', 'status'])
 @Index(['price', 'status'])
 @Index(['createdAt', 'status'])
+@Index(['sku'])
+@Index(['slug'])
 export class Product extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
   @Column({ type: 'varchar', length: 100, unique: true })
-  @Index()
   sku: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
-  @Index()
   slug: string;
 
   @Column({ type: 'text' })
@@ -53,7 +53,6 @@ export class Product extends BaseEntity {
     enum: ProductStatus,
     default: ProductStatus.DRAFT,
   })
-  @Index()
   status: ProductStatus;
 
   @Column({
@@ -142,40 +141,32 @@ export class Product extends BaseEntity {
     default: 0,
     name: 'avg_rating',
   })
-  @Index()
   avgRating: number;
 
   @Column({ type: 'int', default: 0, name: 'review_count' })
   reviewCount: number;
 
   @Column({ type: 'int', default: 0, name: 'view_count' })
-  @Index()
   viewCount: number;
 
   @Column({ type: 'int', default: 0, name: 'sales_count' })
-  @Index()
   salesCount: number;
 
   // Feature Flags
   @Column({ type: 'boolean', default: false, name: 'is_featured' })
-  @Index()
   isFeatured: boolean;
 
   @Column({ type: 'boolean', default: false, name: 'is_published' })
-  @Index()
   isPublished: boolean;
 
   // Foreign Key Columns (for indexes)
   @Column({ type: 'int', nullable: true, name: 'category_id' })
-  @Index()
   categoryId?: number;
 
   @Column({ type: 'int', nullable: true, name: 'brand_id' })
-  @Index()
   brandId?: number;
 
   @Column({ type: 'int', nullable: true, name: 'vendor_id' })
-  @Index()
   vendorId?: number;
 
   // Relationships

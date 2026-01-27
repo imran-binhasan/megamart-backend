@@ -35,7 +35,6 @@ export class Address extends BaseEntity {
 
   // User reference (both customer and vendor have userId)
   @Column({ name: 'user_id', type: 'int' })
-  @Index()
   userId: number;
 
   // Address fields

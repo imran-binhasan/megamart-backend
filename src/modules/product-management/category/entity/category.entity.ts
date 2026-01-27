@@ -11,7 +11,6 @@ export class Category extends BaseEntity {
   name: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
-  @Index()
   slug: string;
 
   @Column({ type: 'text', nullable: true })
@@ -46,7 +45,6 @@ export class Category extends BaseEntity {
     default: 0,
     name: 'display_order',
   })
-  @Index()
   displayOrder: number;
 
   @Column({
@@ -54,7 +52,6 @@ export class Category extends BaseEntity {
     default: true,
     name: 'is_visible',
   })
-  @Index()
   isVisible: boolean;
 
   // Statistics

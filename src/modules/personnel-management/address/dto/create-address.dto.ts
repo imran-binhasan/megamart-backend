@@ -9,9 +9,9 @@ import {
 import { AddressType, AddressOwnerType } from '../entity/address.entity';
 
 export class CreateAddressDto {
+  @IsOptional()
   @IsNumber()
-  @IsNotEmpty()
-  userId: number;
+  userId?: number;
 
   @IsEnum(AddressOwnerType)
   @IsNotEmpty()

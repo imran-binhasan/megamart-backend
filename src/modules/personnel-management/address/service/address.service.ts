@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,6 +11,10 @@ import { UpdateAddressDto } from '../dto/update-address.dto';
 import { Customer } from '../../customer/entity/customer.entity';
 import { Vendor } from '../../vendor/entity/vendor.entity';
 import { CreateAddressDto } from '../dto/create-address.dto';
+import {
+  AuthenticatedUser,
+  isAdmin,
+} from 'src/core/auth/interface/auth-user.interface';
 
 @Injectable()
 export class AddressService {
@@ -22,13 +27,11 @@ export class AddressService {
     private readonly vendorRepository: Repository<Vendor>,
   ) {}
 
-  async create(createAddressDto: CreateAddressDto): Promise<Address> {
-    const { userId, ownerType, isDefault, ...restData } = createAddressDto;
-
-    // Validate that userId is provided
-    if (!userId) {
-      throw new BadRequestException('userId must be provided');
-    }
+  async create(
+    createAddressDto: CreateAddressDto,
+    userId: number,
+  ): Promise<Address> {
+    const { ownerType, isDefault, ...restData } = createAddressDto;
 
     // Validate that ownerType is provided
     if (!ownerType) {
@@ -72,9 +75,16 @@ export class AddressService {
 
 
 
-  async findOne(id: number): Promise<Address> {
+  async findOne(id: number, userId?: number): Promise<Address> {
+    const query: any = { id };
+    
+    // Only enforce ownership if userId is provided (called from controller with JWT)
+    if (userId !== undefined) {
+      query.userId = userId;
+    }
+
     const address = await this.addressRepository.findOne({
-      where: { id },
+      where: query,
       relations: ['user'],
     });
 
@@ -115,6 +125,8 @@ export class AddressService {
   async update(
     id: number,
     updateAddressDto: UpdateAddressDto,
+    userId: number,
+    currentUser?: AuthenticatedUser,
   ): Promise<Address> {
     const existingAddress = await this.addressRepository.findOne({
       where: { id },
@@ -123,6 +135,16 @@ export class AddressService {
 
     if (!existingAddress) {
       throw new NotFoundException(`Address with ID ${id} not found`);
+    }
+
+    // Check ownership: either the owner themselves or an admin
+    const isOwner = existingAddress.userId === userId;
+    const isUserAdmin = currentUser && isAdmin(currentUser);
+
+    if (!isOwner && !isUserAdmin) {
+      throw new ForbiddenException(
+        'You do not have permission to update this address',
+      );
     }
 
     // If setting as default, unset other defaults for the same owner
@@ -138,13 +160,23 @@ export class AddressService {
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number, userId: number, currentUser?: AuthenticatedUser): Promise<void> {
     const address = await this.addressRepository.findOne({
       where: { id },
     });
 
     if (!address) {
       throw new NotFoundException(`Address with ID ${id} not found`);
+    }
+
+    // Check ownership: either the owner themselves or an admin
+    const isOwner = address.userId === userId;
+    const isUserAdmin = currentUser && isAdmin(currentUser);
+
+    if (!isOwner && !isUserAdmin) {
+      throw new ForbiddenException(
+        'You do not have permission to delete this address',
+      );
     }
 
     await this.addressRepository.remove(address);

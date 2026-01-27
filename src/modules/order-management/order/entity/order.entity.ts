@@ -36,14 +36,13 @@ import {
 @Index(['returnStatus'])
 @Index(['orderSource'])
 @Index(['status', 'paymentStatus'])
+@Index(['orderNumber'])
 export class Order extends BaseEntity {
   // ========== Core Order Information ==========
   @Column({ unique: true, length: 50 })
-  @Index()
   orderNumber: string;
 
   @Column()
-  @Index()
   customerId: number;
 
   // ========== Pricing & Amounts ==========
@@ -63,7 +62,6 @@ export class Order extends BaseEntity {
   discountAmount: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  @Index()
   totalAmount: number;
 
   @Column({ type: 'varchar', length: 3, default: 'USD' })
@@ -74,7 +72,6 @@ export class Order extends BaseEntity {
 
   // ========== Order Status ==========
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING })
-  @Index()
   status: OrderStatus;
 
   @Column({ type: 'enum', enum: OrderPriority, default: OrderPriority.NORMAL })
@@ -84,12 +81,10 @@ export class Order extends BaseEntity {
   orderType: OrderType;
 
   @Column({ type: 'enum', enum: OrderSource, default: OrderSource.WEB })
-  @Index()
   orderSource: OrderSource;
 
   // ========== Payment Information ==========
   @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.PENDING })
-  @Index()
   paymentStatus: PaymentStatus;
 
   @Column({ type: 'enum', enum: PaymentMethod, nullable: true })
@@ -107,7 +102,6 @@ export class Order extends BaseEntity {
     enum: ShippingStatus,
     default: ShippingStatus.NOT_SHIPPED,
   })
-  @Index()
   shippingStatus: ShippingStatus;
 
   @Column({
@@ -131,7 +125,6 @@ export class Order extends BaseEntity {
 
   // ========== Date Tracking ==========
   @Column({ type: 'timestamptz' })
-  @Index()
   orderDate: Date;
 
   @Column({ type: 'timestamptz', nullable: true })
@@ -155,7 +148,6 @@ export class Order extends BaseEntity {
     enum: ReturnStatus,
     default: ReturnStatus.NOT_REQUESTED,
   })
-  @Index()
   returnStatus: ReturnStatus;
 
   @Column({ type: 'enum', enum: ReturnReason, nullable: true })

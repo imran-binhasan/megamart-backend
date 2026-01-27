@@ -42,7 +42,7 @@ export default registerAs('database', () => {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: dbName,
-    synchronize: false,
+    synchronize: true,
     logging: env !== 'production',
     autoLoadEntities: true,
     migrations: ['dist/core/database/migrations/*{.ts,.js}'],
