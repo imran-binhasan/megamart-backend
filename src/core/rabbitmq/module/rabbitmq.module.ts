@@ -24,12 +24,7 @@ export class RabbitMQModule {
           imports: [ConfigModule],
           inject: [ConfigService],
           useFactory: async (configService: ConfigService) => {
-            const user = configService.get<string>('RABBITMQ_USER');
-            const password = configService.get<string>('RABBITMQ_PASSWORD');
-            const host = configService.get<string>('RABBITMQ_HOST');
-            const port = configService.get<number>('RABBITMQ_PORT', 5672);
-
-            const uri = `amqp://${user}:${password}@${host}:${port}`;
+            const uri = configService.get<string>('RABBITMQ_URL')!;
 
             return {
               uri,

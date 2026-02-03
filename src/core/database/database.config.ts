@@ -1,25 +1,13 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
+import { URL } from 'url';
 
 export const databaseValidationSchema = Joi.object({
   JWT_REFRESH_SECRET: Joi.string().min(32).required(),
 
-  DB_TYPE: Joi.string().valid('mysql', 'postgres', 'mongodb').required(),
-  DB_NAME: Joi.string().required(),
-  DB_NAME_DEV: Joi.string().required(),
-  DB_HOST: Joi.string().required(), // docker service name is valid
-  DB_PORT: Joi.number().default(5432),
-  DB_USER: Joi.string().required(),
-  DB_PASSWORD: Joi.string().required(),
-
-  REDIS_HOST: Joi.string().required(),
-  REDIS_PORT: Joi.number().default(6379),
-  REDIS_PASSWORD: Joi.string().allow('').optional(),
-
-  RABBITMQ_HOST: Joi.string().required(),
-  RABBITMQ_PORT: Joi.number().default(5672),
-  RABBITMQ_USER: Joi.string().required(),
-  RABBITMQ_PASSWORD: Joi.string().required(),
+  DATABASE_URL: Joi.string().required(),
+  REDIS_URL: Joi.string().required(),
+  RABBITMQ_URL: Joi.string().required(),
 
   CLOUDINARY_API_KEY: Joi.string().allow('').optional(),
   CLOUDINARY_API_SECRET: Joi.string().allow('').optional(),
@@ -30,18 +18,55 @@ export const databaseValidationSchema = Joi.object({
     .default('development'),
 });
 
+function parseDatabaseUrl(url: string) {
+  const parsed = new URL(url);
+  return {
+    type: parsed.protocol.slice(0, -1),
+    host: parsed.hostname,
+    port: Number(parsed.port) || 5432,
+    username: decodeURIComponent(parsed.username),
+    password: decodeURIComponent(parsed.password),
+    database: parsed.pathname.slice(1),
+  } as {
+    type: string;
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+    database: string;
+  };
+}
+
+export function parseRedisUrl(url: string) {
+  const parsed = new URL(url);
+  return {
+    host: parsed.hostname,
+    port: Number(parsed.port) || 6379,
+    password: parsed.password ? decodeURIComponent(parsed.password) : undefined,
+  };
+}
+
+export function parseRabbitMqUrl(url: string) {
+  const parsed = new URL(url);
+  return {
+    host: parsed.hostname,
+    port: Number(parsed.port) || 5672,
+    user: decodeURIComponent(parsed.username),
+    password: decodeURIComponent(parsed.password),
+  };
+}
+
 export default registerAs('database', () => {
   const env = process.env.NODE_ENV || 'development';
-  const dbName =
-    env === 'production' ? process.env.DB_NAME : process.env.DB_NAME_DEV;
+  const dbConfig = parseDatabaseUrl(process.env.DATABASE_URL!);
 
   return {
-    type: process.env.DB_TYPE as 'mysql' | 'postgres' | 'mongodb',
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: dbName,
+    type: dbConfig.type as 'mysql' | 'postgres' | 'mongodb',
+    host: dbConfig.host,
+    port: dbConfig.port,
+    username: dbConfig.username,
+    password: dbConfig.password,
+    database: dbConfig.database,
     synchronize: true,
     logging: env !== 'production',
     autoLoadEntities: true,

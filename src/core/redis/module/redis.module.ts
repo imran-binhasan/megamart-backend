@@ -2,6 +2,7 @@ import { Module, Global } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import { RedisService } from '../service/redis.service';
+import { parseRedisUrl } from '../../database/database.config';
 
 @Global()
 @Module({
@@ -11,11 +12,9 @@ import { RedisService } from '../service/redis.service';
       provide: 'REDIS_CLIENT',
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const host = configService.get<string>('REDIS_HOST', 'redis');
-        const port = configService.get<number>('REDIS_PORT', 6379);
-        const password = configService.get<string>('REDIS_PASSWORD');
+        const redisUrl = configService.get<string>('REDIS_URL')!;
+        const { host, port, password } = parseRedisUrl(redisUrl);
 
-        // Handle empty string password
         const finalPassword =
           password && password.trim().length > 0 ? password : undefined;
 
@@ -37,17 +36,17 @@ import { RedisService } from '../service/redis.service';
         });
 
         client.on('connect', () =>
-          console.log(`✅ Redis connected to ${host}:${port}`),
+          console.log(`\u2705 Redis connected to ${host}:${port}`),
         );
 
-        client.on('ready', () => console.log('🚀 Redis ready'));
+        client.on('ready', () => console.log('\uD83D\uDE80 Redis ready'));
 
         client.on('error', (err) =>
-          console.error('❌ Redis error:', err.message),
+          console.error('\u274C Redis error:', err.message),
         );
 
         client.on('reconnecting', () =>
-          console.log('🔄 Redis reconnecting...'),
+          console.log('\uD83D\uDD04 Redis reconnecting...'),
         );
 
         return client;
