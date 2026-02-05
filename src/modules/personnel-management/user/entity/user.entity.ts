@@ -26,7 +26,7 @@ export class User extends BaseEntity {
     unique: true,
   })
   @Index()
-  email?: string;
+  email: string;
 
   @Column({ name: 'email_verified', default: false })
   emailVerified: boolean;

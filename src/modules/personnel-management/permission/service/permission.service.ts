@@ -1,8 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Permission } from '../entity/permission.entity';
 import { Role } from 'src/modules/personnel-management/role/entity/role.entity';
+import { UpdatePermissionDto } from '../dto/update-permission.dto';
 
 @Injectable()
 export class PermissionService {
@@ -45,8 +51,24 @@ export class PermissionService {
   async createPermission(
     resource: string,
     action: string,
+    displayName?: string,
+    scope?: 'all' | 'own' | 'department' | 'assigned',
   ): Promise<Permission> {
-    const permission = this.permissionRepository.create({ resource, action });
+    const existing = await this.permissionRepository.findOne({
+      where: { resource, action },
+    });
+    if (existing) {
+      throw new ConflictException(
+        `Permission ${action}:${resource} already exists`,
+      );
+    }
+
+    const permission = this.permissionRepository.create({
+      resource,
+      action,
+      displayName: displayName || `${action}:${resource}`,
+      scope: scope || 'own',
+    });
     return await this.permissionRepository.save(permission);
   }
 
@@ -54,6 +76,28 @@ export class PermissionService {
     return await this.permissionRepository.find({
       order: { resource: 'ASC', action: 'ASC' },
     });
+  }
+
+  async findById(id: number): Promise<Permission> {
+    const permission = await this.permissionRepository.findOne({
+      where: { id },
+    });
+    if (!permission) {
+      throw new NotFoundException(`Permission with ID ${id} not found`);
+    }
+    return permission;
+  }
+
+  async update(id: number, dto: UpdatePermissionDto): Promise<Permission> {
+    const permission = await this.findById(id);
+    Object.assign(permission, dto);
+    return await this.permissionRepository.save(permission);
+  }
+
+  async remove(id: number): Promise<void> {
+    const permission = await this.findById(id);
+    await this.permissionRepository.remove(permission);
+    this.logger.log(`Deleted permission: ${id}`);
   }
 
   async findByResourceAndAction(
@@ -69,7 +113,6 @@ export class PermissionService {
     await this.permissionRepository.delete(id);
   }
 
-  // Utility method to check if a permission string is valid
   validatePermissionFormat(permission: string): boolean {
     const parts = permission.split(':');
     return (
@@ -77,7 +120,6 @@ export class PermissionService {
     );
   }
 
-  // Get all unique resources
   async getUniqueResources(): Promise<string[]> {
     const result = await this.permissionRepository
       .createQueryBuilder('permission')
@@ -87,7 +129,6 @@ export class PermissionService {
     return result.map((r) => r.resource);
   }
 
-  // Get all unique actions
   async getUniqueActions(): Promise<string[]> {
     const result = await this.permissionRepository
       .createQueryBuilder('permission')
