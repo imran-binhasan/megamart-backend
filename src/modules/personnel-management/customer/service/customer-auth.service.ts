@@ -73,7 +73,7 @@ export class CustomerAuthService extends AuthBaseService {
       // Generate tokens
       const tokens = this.tokenService.generateTokenPair({
         sub: user.id.toString(),
-        email: user.email!,
+        email: user.email,
         type: 'customer',
       });
 
@@ -150,7 +150,7 @@ export class CustomerAuthService extends AuthBaseService {
 
     const tokens = this.tokenService.generateTokenPair({
       sub: user.id.toString(),
-      email: user.email!,
+      email: user.email,
       type: 'customer',
     });
 

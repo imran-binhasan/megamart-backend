@@ -14,15 +14,14 @@ import { VendorKYC } from '../entity/vendor-kyc.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Vendor,
-      VendorBankInfo,
-      VendorKYC,
-      User,
-    ]),
+    TypeOrmModule.forFeature([Vendor, VendorBankInfo, VendorKYC, User]),
     AuthModule,
   ],
-  controllers: [VendorAuthController, VendorProfileController, VendorController],
+  controllers: [
+    VendorAuthController,
+    VendorProfileController,
+    VendorController,
+  ],
   providers: [VendorAuthService, VendorService, CloudinaryService],
   exports: [VendorAuthService, VendorService],
 })

@@ -36,7 +36,7 @@ export class CustomerProfileService {
 
     const dto: CustomerProfileDto = {
       id: customer.id,
-      email: customer.user.email!,
+      email: customer.user.email,
       firstName: customer.user.firstName,
       lastName: customer.user.lastName,
       phone: customer.user.phone,

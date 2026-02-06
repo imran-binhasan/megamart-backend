@@ -8,7 +8,13 @@ import {
   UseInterceptors,
   UseGuards,
 } from '@nestjs/common';
-import { ApiConsumes, ApiOperation, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { CustomerProfileService } from '../service/customer-profile.service';
 import { CurrentUser } from 'src/core/auth/decorator/current-user.decorator';
 import { CustomerGuard } from 'src/core/auth/guard/customer.guard';

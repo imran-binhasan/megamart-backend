@@ -131,7 +131,7 @@ export class CustomerOAuthService {
       // Generate tokens
       const tokens = this.tokenService.generateTokenPair({
         sub: user.id.toString(),
-        email: user.email!,
+        email: user.email,
         type: 'customer',
       });
 
@@ -142,7 +142,7 @@ export class CustomerOAuthService {
         expiresIn: tokens.expires_in,
         user: {
           id: user.customer.id,
-          email: user.email!,
+          email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
           image: user.image,

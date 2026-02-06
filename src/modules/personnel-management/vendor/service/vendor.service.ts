@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Vendor } from '../entity/vendor.entity';
+import { Vendor, VendorStatus } from '../entity/vendor.entity';
 import { User } from '../../user/entity/user.entity';
 import { VendorProfileDto } from '../dto/vendor-profile.dto';
+import { PaginatedServiceResponse } from 'src/shared/interface/api-response.interface';
 
 @Injectable()
 export class VendorService {
@@ -13,6 +18,84 @@ export class VendorService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
+  async findAll(query: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: string;
+  }): Promise<PaginatedServiceResponse<Vendor>> {
+    const { page = 1, limit = 10, search, status } = query;
+    const qb = this.vendorRepository
+      .createQueryBuilder('vendor')
+      .leftJoinAndSelect('vendor.user', 'user');
+
+    if (search?.trim()) {
+      qb.andWhere(
+        '(vendor.shopName ILIKE :search OR user.email ILIKE :search OR user.firstName ILIKE :search OR user.lastName ILIKE :search)',
+        { search: `%${search.trim()}%` },
+      );
+    }
+
+    if (status) {
+      qb.andWhere('vendor.status = :status', { status });
+    }
+
+    const [items, total] = await qb
+      .skip((page - 1) * limit)
+      .take(limit)
+      .orderBy('vendor.createdAt', 'DESC')
+      .getManyAndCount();
+
+    return {
+      items,
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
+  }
+
+  async findById(id: number): Promise<Vendor> {
+    const vendor = await this.vendorRepository.findOne({
+      where: { id },
+      relations: ['user', 'kyc', 'bankInfo'],
+    });
+    if (!vendor) {
+      throw new NotFoundException(`Vendor with ID ${id} not found`);
+    }
+    return vendor;
+  }
+
+  async approveVendor(id: number): Promise<Vendor> {
+    const vendor = await this.findById(id);
+    if (vendor.status !== VendorStatus.PENDING_VERIFICATION) {
+      throw new BadRequestException(`Vendor is already ${vendor.status}`);
+    }
+    vendor.status = VendorStatus.ACTIVE;
+    vendor.approvedAt = new Date();
+    return this.vendorRepository.save(vendor);
+  }
+
+  async suspendVendor(id: number): Promise<Vendor> {
+    const vendor = await this.findById(id);
+    if (vendor.status === VendorStatus.SUSPENDED) {
+      throw new BadRequestException('Vendor is already suspended');
+    }
+    if (vendor.status === VendorStatus.BANNED) {
+      throw new BadRequestException('Cannot suspend a banned vendor');
+    }
+    vendor.status = VendorStatus.SUSPENDED;
+    return this.vendorRepository.save(vendor);
+  }
+
+  async rejectVendor(id: number): Promise<Vendor> {
+    const vendor = await this.findById(id);
+    if (vendor.status !== VendorStatus.PENDING_VERIFICATION) {
+      throw new BadRequestException(`Vendor is already ${vendor.status}`);
+    }
+    vendor.status = VendorStatus.BANNED;
+    vendor.rejectedAt = new Date();
+    vendor.rejectionReason = 'Rejected by admin';
+    return this.vendorRepository.save(vendor);
+  }
 
   async getProfile(userId: number): Promise<VendorProfileDto> {
     const vendor = await this.vendorRepository.findOne({

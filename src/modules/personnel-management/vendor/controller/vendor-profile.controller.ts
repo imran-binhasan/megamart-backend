@@ -1,11 +1,10 @@
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import {
-  Body,
-  Controller,
-  Get,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { VendorService } from '../service/vendor.service';
 import { CurrentUser } from 'src/core/auth/decorator/current-user.decorator';
 import { VendorGuard } from 'src/core/auth/guard/vendor.guard';

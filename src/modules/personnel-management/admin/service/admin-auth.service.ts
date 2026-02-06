@@ -88,7 +88,7 @@ export class AdminAuthService extends AuthBaseService {
       // Generate tokens
       const tokens = this.tokenService.generateTokenPair({
         sub: user.id.toString(),
-        email: user.email!,
+        email: user.email,
         type: 'admin',
         roleId: dto.roleId,
         permissions,
@@ -105,7 +105,7 @@ export class AdminAuthService extends AuthBaseService {
         },
         user: {
           id: admin.id,
-          email: user.email!,
+          email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
           phone: user.phone,
@@ -167,7 +167,7 @@ export class AdminAuthService extends AuthBaseService {
 
     const tokens = this.tokenService.generateTokenPair({
       sub: user.id.toString(),
-      email: user.email!,
+      email: user.email,
       type: 'admin',
       roleId: user.admin.roleId,
       permissions,
@@ -184,7 +184,7 @@ export class AdminAuthService extends AuthBaseService {
       },
       user: {
         id: user.admin.id,
-        email: user.email!,
+        email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         phone: user.phone,
