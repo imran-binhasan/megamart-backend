@@ -35,20 +35,20 @@ import { Cart } from '../entity/cart.entity';
 
 /**
  * Cart Controller - Optimized with 5 core endpoints + query support + customer endpoints
- * 
+ *
  * Core Endpoints (5):
  * 1. POST /cart - Add item to cart (customer only)
  * 2. GET /cart - List cart items with advanced query filters (admin)
  * 3. GET /cart/:id - Get single cart item
  * 4. PATCH /cart/:id - Update cart item quantity
  * 5. DELETE /cart/:id - Remove cart item
- * 
+ *
  * Customer-Only Endpoints:
  * - GET /cart/my-cart - Get authenticated user's cart (via query)
  * - GET /cart/my-cart/total - Get cart total
  * - GET /cart/my-cart/count - Get cart items count
  * - DELETE /cart/clear/my-cart - Clear entire cart
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by product name)
@@ -120,7 +120,8 @@ export class CartController {
    */
   @ApiOperation({
     summary: 'Update cart item quantity',
-    description: 'Update quantity for a specific cart item. Invalidates all cart caches.',
+    description:
+      'Update quantity for a specific cart item. Invalidates all cart caches.',
   })
   @ApiParam({
     name: 'id',

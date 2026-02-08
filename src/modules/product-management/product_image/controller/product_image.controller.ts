@@ -31,10 +31,7 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Query() query?: ProductImageQueryDto,
   ) {
-    return this.productImageService.findByProduct(
-      productId,
-      query,
-    );
+    return this.productImageService.findByProduct(productId, query);
   }
 
   // POST /products/:productId/images - Create image for product
@@ -57,10 +54,7 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Param('imageId', ParseIntPipe) imageId: number,
   ) {
-    return this.productImageService.findOneByProduct(
-      imageId,
-      productId,
-    );
+    return this.productImageService.findOneByProduct(imageId, productId);
   }
 
   // PATCH /products/:productId/images/:imageId - Update image (including isPrimary)
@@ -96,9 +90,6 @@ export class ProductImageController {
     @Param('productId', ParseIntPipe) productId: number,
     @Body('imageIds') imageIds: number[],
   ) {
-    return this.productImageService.reorderImages(
-      productId,
-      imageIds,
-    );
+    return this.productImageService.reorderImages(productId, imageIds);
   }
 }

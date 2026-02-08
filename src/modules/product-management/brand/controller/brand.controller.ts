@@ -36,14 +36,14 @@ import { BrandQueryDto } from '../dto/query-brand.dto';
 
 /**
  * Brand Controller - Optimized with 5 core endpoints + query support
- * 
+ *
  * Endpoints:
  * 1. POST /brand - Create brand
  * 2. GET /brand - List brands with advanced query filters
  * 3. GET /brand/:id - Get single brand
  * 4. PATCH /brand/:id - Update brand
  * 5. DELETE /brand/:id - Delete brand
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by name)
@@ -98,8 +98,7 @@ export class BrandController {
    */
   @ApiOperation({
     summary: 'Get all brands with advanced filtering',
-    description:
-      'Retrieve brands with pagination and optional data enrichment',
+    description: 'Retrieve brands with pagination and optional data enrichment',
   })
   @ApiResponse({
     status: 200,

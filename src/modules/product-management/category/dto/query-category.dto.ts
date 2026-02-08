@@ -6,7 +6,7 @@ import { PaginationQuery } from 'src/shared/dto/pagination_query.dto';
 
 /**
  * Category Query DTO - Supports advanced filtering
- * 
+ *
  * Usage examples:
  * - GET /category (paginated list)
  * - GET /category?page=1&limit=10 (pagination)
@@ -61,7 +61,8 @@ export class CategoryQueryDto extends PaginationQuery {
   includeChildren?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Return categories as hierarchical tree structure (ignores pagination)',
+    description:
+      'Return categories as hierarchical tree structure (ignores pagination)',
     type: Boolean,
     example: false,
   })

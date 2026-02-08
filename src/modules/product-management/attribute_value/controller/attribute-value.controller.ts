@@ -32,14 +32,14 @@ import { UpdateAttributeValueDto } from '../dto/update-attribute_value.dto';
 
 /**
  * Attribute Value Controller - Optimized with 5 core endpoints + query support
- * 
+ *
  * Endpoints:
  * 1. POST /attribute-value - Create attribute value
  * 2. GET /attribute-value - List attribute values with advanced query filters
  * 3. GET /attribute-value/:id - Get single attribute value
  * 4. PATCH /attribute-value/:id - Update attribute value
  * 5. DELETE /attribute-value/:id - Delete attribute value
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by value)
@@ -87,7 +87,8 @@ export class AttributeValueController {
    */
   @ApiOperation({
     summary: 'Get all attribute values with advanced filtering',
-    description: 'Retrieve attribute values with pagination and filtering by attribute',
+    description:
+      'Retrieve attribute values with pagination and filtering by attribute',
   })
   @ApiResponse({
     status: 200,

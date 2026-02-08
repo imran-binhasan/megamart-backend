@@ -30,14 +30,14 @@ import { WishlistQueryDto } from '../dto/query-wishlist.dto';
 
 /**
  * Wishlist Controller - Optimized with 5 core endpoints + query support
- * 
+ *
  * Endpoints:
  * 1. POST /wishlist - Create wishlist item
  * 2. GET /wishlist - List wishlist items with advanced query filters
  * 3. GET /wishlist/:id - Get single wishlist item
  * 4. PATCH /wishlist/:id - Update wishlist item
  * 5. DELETE /wishlist/:id - Delete wishlist item
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by product name)

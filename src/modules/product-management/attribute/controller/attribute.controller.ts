@@ -32,14 +32,14 @@ import { AttributeQueryDto } from '../dto/query-attribute.dto';
 
 /**
  * Attribute Controller - Optimized with 5 core endpoints + query support
- * 
+ *
  * Endpoints:
  * 1. POST /attribute - Create attribute
  * 2. GET /attribute - List attributes with advanced query filters
  * 3. GET /attribute/:id - Get single attribute
  * 4. PATCH /attribute/:id - Update attribute
  * 5. DELETE /attribute/:id - Delete attribute
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by name)

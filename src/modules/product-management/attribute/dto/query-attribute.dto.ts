@@ -6,7 +6,7 @@ import { AttributeType } from '../entity/attribute.entity';
 
 /**
  * Attribute Query DTO - Supports advanced filtering
- * 
+ *
  * Usage examples:
  * - GET /attribute (paginated list)
  * - GET /attribute?page=1&limit=10 (pagination)

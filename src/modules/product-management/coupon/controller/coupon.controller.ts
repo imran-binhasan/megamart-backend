@@ -33,17 +33,17 @@ import { ValidateCouponDto } from '../dto/validate-coupon.dto';
 
 /**
  * Coupon Controller - Optimized with 5 core endpoints + query support
- * 
+ *
  * Endpoints:
  * 1. POST /coupon - Create coupon
  * 2. GET /coupon - List coupons with advanced query filters
  * 3. GET /coupon/:id - Get single coupon
  * 4. PATCH /coupon/:id - Update coupon
  * 5. DELETE /coupon/:id - Delete coupon
- * 
+ *
  * Additional public endpoints:
  * - POST /coupon/validate - Validate coupon code
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by name/code)

@@ -172,7 +172,8 @@ export class ProductReviewController {
   @Patch(':id')
   @ApiOperation({
     summary: 'Update review',
-    description: 'Update an existing product review. Only rating, name, and comment can be updated.',
+    description:
+      'Update an existing product review. Only rating, name, and comment can be updated.',
   })
   @ApiParam({
     name: 'id',
@@ -202,7 +203,8 @@ export class ProductReviewController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Delete review',
-    description: 'Soft delete a product review. Data is retained but marked as deleted.',
+    description:
+      'Soft delete a product review. Data is retained but marked as deleted.',
   })
   @ApiParam({
     name: 'id',

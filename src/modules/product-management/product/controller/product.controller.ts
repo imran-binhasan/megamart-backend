@@ -22,7 +22,10 @@ import {
 import { ProductService } from '../service/product.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
-import { RequireResource, Public } from 'src/core/auth/decorator/auth.decorator';
+import {
+  RequireResource,
+  Public,
+} from 'src/core/auth/decorator/auth.decorator';
 import { ProductQueryDto } from '../dto/query-product.dto';
 
 @ApiTags('Products')

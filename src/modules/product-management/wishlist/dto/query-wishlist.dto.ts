@@ -5,7 +5,7 @@ import { PaginationQuery } from 'src/shared/dto/pagination_query.dto';
 
 /**
  * Wishlist Query DTO - Supports advanced filtering
- * 
+ *
  * Usage examples:
  * - GET /wishlist (all wishlists for admin)
  * - GET /wishlist?page=1&limit=10 (pagination)

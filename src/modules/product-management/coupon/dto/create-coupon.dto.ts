@@ -65,7 +65,8 @@ export class CreateCouponDto {
   maxDiscountAmount?: number;
 
   @ApiPropertyOptional({
-    description: 'Discount percentage (0-100, required if couponType is PERCENTAGE)',
+    description:
+      'Discount percentage (0-100, required if couponType is PERCENTAGE)',
     type: Number,
     minimum: 0,
     maximum: 100,

@@ -205,7 +205,6 @@ export class ProductImageService {
     await this.productImageRepository.remove(image);
   }
 
-
   async findPrimaryImage(productId: number): Promise<ProductImage | null> {
     return this.productImageRepository.findOne({
       where: { product: { id: productId }, isPrimary: true },

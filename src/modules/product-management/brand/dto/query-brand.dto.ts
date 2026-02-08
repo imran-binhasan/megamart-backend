@@ -6,7 +6,7 @@ import { PaginationQuery } from 'src/shared/dto/pagination_query.dto';
 
 /**
  * Brand Query DTO - Supports advanced filtering
- * 
+ *
  * Usage examples:
  * - GET /brand (paginated list)
  * - GET /brand?page=1&limit=10 (pagination)

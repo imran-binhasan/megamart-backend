@@ -6,7 +6,7 @@ import { PaginationQuery } from 'src/shared/dto/pagination_query.dto';
 
 /**
  * Attribute Value Query DTO - Supports advanced filtering
- * 
+ *
  * Usage examples:
  * - GET /attribute-value (paginated list)
  * - GET /attribute-value?page=1&limit=10 (pagination)

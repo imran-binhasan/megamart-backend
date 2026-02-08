@@ -6,7 +6,7 @@ import { PaginationQuery } from 'src/shared/dto/pagination_query.dto';
 
 /**
  * Cart Query DTO - Supports advanced filtering
- * 
+ *
  * Usage examples:
  * - GET /cart (all carts for admin)
  * - GET /cart?page=1&limit=10 (pagination)

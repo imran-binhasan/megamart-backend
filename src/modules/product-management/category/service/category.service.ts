@@ -60,9 +60,7 @@ export class CategoryService {
     return this.findOne(savedCategory.id);
   }
 
-  async findAll(
-    query: CategoryQueryDto,
-  ): Promise<any> {
+  async findAll(query: CategoryQueryDto): Promise<any> {
     const {
       page = 1,
       limit = 10,
@@ -292,7 +290,7 @@ export class CategoryService {
   }
 
   // Utility methods for query support
-  
+
   /**
    * Get root categories with optional filtering
    * Supports search, includeChildren, and includeProducts

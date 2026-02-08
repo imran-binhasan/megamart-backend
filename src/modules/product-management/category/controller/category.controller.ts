@@ -32,14 +32,14 @@ import { CategoryQueryDto } from '../dto/query-category.dto';
 
 /**
  * Category Controller - Optimized with 5 core endpoints + query support
- * 
+ *
  * Endpoints:
  * 1. POST /category - Create category
  * 2. GET /category - List categories with advanced query filters
  * 3. GET /category/:id - Get single category
  * 4. PATCH /category/:id - Update category
  * 5. DELETE /category/:id - Delete category
- * 
+ *
  * Query Parameters Support:
  * - page, limit (pagination)
  * - search (by name)
@@ -61,7 +61,8 @@ export class CategoryController {
    */
   @ApiOperation({
     summary: 'Create a new category',
-    description: 'Create a new product category. Can be a root category or a subcategory.',
+    description:
+      'Create a new product category. Can be a root category or a subcategory.',
   })
   @ApiResponse({
     status: 201,
@@ -216,7 +217,8 @@ export class CategoryController {
    */
   @ApiOperation({
     summary: 'Get a single category',
-    description: 'Retrieve a specific category with all its details including parent and children.',
+    description:
+      'Retrieve a specific category with all its details including parent and children.',
   })
   @ApiParam({
     name: 'id',
@@ -265,7 +267,8 @@ export class CategoryController {
    */
   @ApiOperation({
     summary: 'Update a category',
-    description: 'Update category name and/or parent. Prevents circular dependencies.',
+    description:
+      'Update category name and/or parent. Prevents circular dependencies.',
   })
   @ApiParam({
     name: 'id',

@@ -1,8 +1,4 @@
-import {
-  IsOptional,
-  IsEnum,
-  IsBoolean,
-} from 'class-validator';
+import { IsOptional, IsEnum, IsBoolean } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { PaginationQuery } from 'src/shared/dto/pagination_query.dto';
