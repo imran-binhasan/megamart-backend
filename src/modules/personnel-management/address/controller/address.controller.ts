@@ -29,10 +29,7 @@ export class AddressController {
     @Body() createAddressDto: CreateAddressDto,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    return this.addressService.create(
-      createAddressDto,
-      user.id,
-    );
+    return this.addressService.create(createAddressDto, user.id);
   }
 
   @RequireResource('address', 'read')
@@ -51,12 +48,7 @@ export class AddressController {
     @Body() updateAddressDto: UpdateAddressDto,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    return this.addressService.update(
-      id,
-      updateAddressDto,
-      user.id,
-      user,
-    );
+    return this.addressService.update(id, updateAddressDto, user.id, user);
   }
 
   @RequireResource('address', 'delete')

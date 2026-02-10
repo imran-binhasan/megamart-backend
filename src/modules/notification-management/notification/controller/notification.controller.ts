@@ -75,10 +75,7 @@ export class NotificationController {
     @Param('id', ParseIntPipe) id: number,
     @Body() sendNotificationDto: SendNotificationDto,
   ) {
-    return this.notificationService.sendNotification(
-      id,
-      sendNotificationDto,
-    );
+    return this.notificationService.sendNotification(id, sendNotificationDto);
   }
 
   // Broadcast notification to all customers
@@ -95,10 +92,7 @@ export class NotificationController {
     @Param('customerId', ParseIntPipe) customerId: number,
     @Query() query: NotificationQueryDto,
   ) {
-    return this.notificationService.getCustomerNotifications(
-      customerId,
-      query,
-    );
+    return this.notificationService.getCustomerNotifications(customerId, query);
   }
 
   @Public()
@@ -123,10 +117,7 @@ export class NotificationController {
     @Param('customerId', ParseIntPipe) customerId: number,
     @Body() markAsReadDto: MarkAsReadDto,
   ) {
-    return this.notificationService.markAsRead(
-      customerId,
-      markAsReadDto,
-    );
+    return this.notificationService.markAsRead(customerId, markAsReadDto);
   }
 
   @Public()

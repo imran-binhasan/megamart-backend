@@ -82,7 +82,10 @@ export class InventoryController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid input or product not found' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or product not found',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async create(@Body() createInventoryDto: CreateInventoryDto) {
     return this.inventoryService.create(createInventoryDto);
@@ -135,7 +138,8 @@ export class InventoryController {
   @Get(':id')
   @ApiOperation({
     summary: 'Get inventory record by ID',
-    description: 'Retrieve a specific inventory record with all details and transaction history.',
+    description:
+      'Retrieve a specific inventory record with all details and transaction history.',
   })
   @ApiParam({
     name: 'id',
@@ -232,7 +236,8 @@ export class InventoryController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Delete inventory record',
-    description: 'Soft delete an inventory record. Data is retained but marked as deleted.',
+    description:
+      'Soft delete an inventory record. Data is retained but marked as deleted.',
   })
   @ApiParam({
     name: 'id',
@@ -240,7 +245,10 @@ export class InventoryController {
     example: 1,
     type: Number,
   })
-  @ApiResponse({ status: 204, description: 'Inventory record deleted successfully' })
+  @ApiResponse({
+    status: 204,
+    description: 'Inventory record deleted successfully',
+  })
   @ApiResponse({ status: 404, description: 'Inventory record not found' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.inventoryService.remove(id);

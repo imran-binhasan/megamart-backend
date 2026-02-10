@@ -73,11 +73,9 @@ export class AddressService {
     return this.findOne(savedAddress.id);
   }
 
-
-
   async findOne(id: number, userId?: number): Promise<Address> {
     const query: any = { id };
-    
+
     // Only enforce ownership if userId is provided (called from controller with JWT)
     if (userId !== undefined) {
       query.userId = userId;
@@ -160,7 +158,11 @@ export class AddressService {
     return this.findOne(id);
   }
 
-  async remove(id: number, userId: number, currentUser?: AuthenticatedUser): Promise<void> {
+  async remove(
+    id: number,
+    userId: number,
+    currentUser?: AuthenticatedUser,
+  ): Promise<void> {
     const address = await this.addressRepository.findOne({
       where: { id },
     });

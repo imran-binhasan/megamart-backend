@@ -9,7 +9,10 @@ import { Vendor } from '../../vendor/entity/vendor.entity';
 import { User } from '../../user/entity/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Address, Customer, Vendor, User]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Address, Customer, Vendor, User]),
+    AuthModule,
+  ],
   controllers: [AddressController],
   providers: [AddressService],
   exports: [AddressService],

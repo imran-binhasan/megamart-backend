@@ -1,5 +1,12 @@
 import { BaseEntity } from 'src/shared/entity/base.entity';
-import { Column, DeleteDateColumn, Entity, ManyToOne, Index, JoinColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  Index,
+  JoinColumn,
+} from 'typeorm';
 import { Customer } from '../../customer/entity/customer.entity';
 import { Vendor } from '../../vendor/entity/vendor.entity';
 import { User } from '../../user/entity/user.entity';
